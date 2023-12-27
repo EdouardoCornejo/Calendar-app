@@ -25,7 +25,6 @@ export const CalendarPage = () => {
   );
 
   const eventStyleGetter = (event, start, end, isSelected) => {
-    console.log({ event, start, end, isSelected });
     const style = {
       backgroundColor: "#347CF7",
       borderRadius: "0px",
