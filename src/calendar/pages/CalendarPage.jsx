@@ -8,18 +8,12 @@ import { useUiStore, useCalendarStore } from "../../hooks";
 export const CalendarPage = () => {
   const { openDateModal } = useUiStore();
   const { events, setActiveEvent } = useCalendarStore();
+
   const [lastView, setLastView] = useState(
     localStorage.getItem("lastView") || "week"
   );
 
   const eventStyleGetter = (event, start, end, isSelected) => {
-    console.log(
-      "🚀 ~ file: CalendarPage.jsx:30 ~ eventStyleGetter ~ event, start, end, isSelected:",
-      event,
-      start,
-      end,
-      isSelected
-    );
     const style = {
       backgroundColor: "#347CF7",
       borderRadius: "0px",

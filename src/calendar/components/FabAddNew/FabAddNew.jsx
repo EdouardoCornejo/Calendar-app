@@ -7,7 +7,6 @@ export const FabAddNew = () => {
 
   const handleClickNew = () => {
     setActiveEvent({
-      _id: new Date().getTime(),
       title: "",
       notes: "",
       start: new Date(),
