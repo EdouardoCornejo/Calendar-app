@@ -1,10 +1,11 @@
 import { addHours, differenceInSeconds } from "date-fns";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Modal from "react-modal";
 import ReactDatePicker, { registerLocale } from "react-datepicker";
 import es from "date-fns/locale/es";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
+import { useCalendarStore, useUiStore } from "../../../hooks";
 
 registerLocale("es", es);
 
@@ -22,20 +23,15 @@ const customStyles = {
 Modal.setAppElement("#root");
 
 export const CalendarModal = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const { isDateModalOpen, closeDateModal } = useUiStore();
+  const { activeEvent, startSavingEvent } = useCalendarStore();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formValues, setFormValues] = useState({
-    title: "Eduardo",
-    notes: "Cornejo",
+    title: "",
+    notes: "",
     start: new Date(),
     end: addHours(new Date(), 2),
   });
-
-  const titleClass = useMemo(() => {
-    if (!formSubmitted) return "";
-
-    return formValues.title.length > 0 ? "is-valid" : "is-invalid";
-  }, [formValues.title, formSubmitted]);
 
   const onInputChange = ({ target }) => {
     setFormValues({
@@ -51,9 +47,7 @@ export const CalendarModal = () => {
     });
   };
 
-  const onCloseModal = () => setIsOpen(false);
-
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
 
     setFormSubmitted(true);
@@ -66,12 +60,28 @@ export const CalendarModal = () => {
     }
 
     if (formValues.title.length <= 0) return;
+
+    await startSavingEvent(formValues);
+    closeDateModal();
+    setFormSubmitted(false);
   };
+
+  const titleClass = useMemo(() => {
+    if (!formSubmitted) return "";
+
+    return formValues.title.length > 0 ? "is-valid" : "is-invalid";
+  }, [formValues.title, formSubmitted]);
+
+  useEffect(() => {
+    if (activeEvent !== null) {
+      setFormValues({ ...activeEvent });
+    }
+  }, [activeEvent]);
 
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={onCloseModal}
+      isOpen={isDateModalOpen}
+      onRequestClose={closeDateModal}
       style={customStyles}
       className="modal"
       overlayClassName="modal-fondo"
