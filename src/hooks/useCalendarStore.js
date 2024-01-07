@@ -8,6 +8,7 @@ import {
 } from "../store";
 import { calendarApi } from "../api";
 import { dateFormatter } from "../helpers";
+import Swal from "sweetalert2";
 
 export const useCalendarStore = () => {
   const dispatch = useDispatch();
@@ -19,17 +20,19 @@ export const useCalendarStore = () => {
   };
 
   const startSavingEvent = async (calendarEvent) => {
-    if (calendarEvent._id) {
-      //Update
-      dispatch(onUpdateEvent({ ...calendarEvent }));
-    } else {
-      //Create
-      try {
-        const { data } = await calendarApi.post("/events", calendarEvent);
-        dispatch(onAddNewEvent({ ...calendarEvent, id: data.event.id, user }));
-      } catch (error) {
-        console.log("StartSavingEvent ~ error:", error);
+    try {
+      if (calendarEvent.id) {
+        //Update
+        await calendarApi.put(`/events/${calendarEvent.id}`, calendarEvent);
+        dispatch(onUpdateEvent({ ...calendarEvent, user }));
+        return;
       }
+
+      //Create
+      const { data } = await calendarApi.post("/events", calendarEvent);
+      dispatch(onAddNewEvent({ ...calendarEvent, id: data.event.id, user }));
+    } catch (error) {
+      Swal.fire("Error saving", error.response.data.msg, "error");
     }
   };
 
