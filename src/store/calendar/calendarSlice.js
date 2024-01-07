@@ -7,7 +7,7 @@ import { createSlice } from "@reduxjs/toolkit";
 //   "start": "2024-01-07T05:15:49.015Z",
 //   "end": "2024-01-07T07:15:49.015Z",
 //   "user": {
-//       "_id": "658f34b9726d92a1d981daf8",
+//       "_uid": "658f34b9726d92a1d981daf8",
 //       "name": "Eduardo"
 //   },
 //   "id": "659a3394ab0a73353df83f88"
@@ -43,7 +43,7 @@ export const calendarSlice = createSlice({
     onDeleteEvent: (state) => {
       if (state.activeEvent) {
         state.events = state.events.filter(
-          (event) => event._id !== state.activeEvent._id
+          (event) => event.id !== state.activeEvent.id
         );
         state.activeEvent = null;
       }
