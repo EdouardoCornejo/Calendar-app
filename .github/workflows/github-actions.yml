@@ -24,9 +24,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Start
-        run: npm run dev
-
       - name: Show job status
         run: echo "🍏 This job's status is ${{ job.status }}."
    
