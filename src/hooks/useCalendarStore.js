@@ -5,10 +5,13 @@ import {
   onSetActiveEvent,
   onUpdateEvent,
 } from "../store";
+import { calendarApi } from "../api";
+import { dateFormatter } from "../helpers";
 
 export const useCalendarStore = () => {
   const dispatch = useDispatch();
   const { events, activeEvent } = useSelector((state) => state.calendar);
+  const { user } = useSelector((state) => state.auth);
 
   const setActiveEvent = (calendarEvent) => {
     dispatch(onSetActiveEvent(calendarEvent));
@@ -20,12 +23,31 @@ export const useCalendarStore = () => {
       dispatch(onUpdateEvent({ ...calendarEvent }));
     } else {
       //Create
-      dispatch(onAddNewEvent({ ...calendarEvent, _id: new Date().getTime() }));
+      try {
+        const { data } = await calendarApi.post("/events", calendarEvent);
+        dispatch(onAddNewEvent({ ...calendarEvent, id: data.event.id, user }));
+      } catch (error) {
+        console.log("StartSavingEvent ~ error:", error);
+      }
     }
   };
 
   const startDeletingEvent = () => {
     dispatch(onDeleteEvent());
+  };
+
+  const startLoadingEvents = async () => {
+    try {
+      const { data } = await calendarApi.get("/events");
+      const event = dateFormatter(data.events);
+      console.log(
+        "🚀 ~ file: useCalendarStore.js:43 ~ startLoadingEvents ~ event:",
+        event
+      );
+      // dispatch()
+    } catch (error) {
+      console.log("StartLoadingEvents ~ error:", error);
+    }
   };
 
   return {
@@ -38,5 +60,6 @@ export const useCalendarStore = () => {
     setActiveEvent,
     startSavingEvent,
     startDeletingEvent,
+    startLoadingEvents,
   };
 };
