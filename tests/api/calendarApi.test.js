@@ -1,5 +1,12 @@
 import calendarApi from '../../src/api/calendarApi';
 
+/**
+ * Test in calendarApi
+ * should have a config by default
+ * should have a x-token in header for all fetch
+ *  ✓ should have a config by default
+ *  ✓ should have a x-token in header for all fetch
+ */
 describe('Calendar API', () => {
 
     test('should have a config by default', () => {
