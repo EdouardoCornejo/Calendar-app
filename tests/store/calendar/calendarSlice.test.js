@@ -23,7 +23,6 @@ describe('test in calendarSlice', () => {
         }
 
         const state = calendarSlice.reducer(calendarWithEventsStates, onAddNewEvent(newEvent))
-        console.log("🚀 ~ test ~ state:", state)
         expect(state.events.length).toBe(3);
         expect(state.events[2]).toEqual(newEvent);
         expect(state.events).toEqual([...events, newEvent])
