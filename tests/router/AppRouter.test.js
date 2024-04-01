@@ -2,7 +2,6 @@ import { render, screen } from "@testing-library/react";
 import { useAuthStore } from "../../src/hooks";
 import { AppRouter } from "../../src/router/AppRouter";
 import { MemoryRouter } from "react-router-dom";
-import { CalendarPage } from "../../src/calendar";
 
 jest.mock("../../src/hooks/useAuthStore");
 

@@ -21,6 +21,7 @@ describe('Calendar API', () => {
             const res = await calendarApi.get('/auth/');
             expect(res.config.headers['x-token']).toBe('ABC123-XYZ');
         } catch (error) {
+            console.log(error);
         }
     });
 });

@@ -55,7 +55,7 @@ describe('test in calendarSlice', () => {
         expect(state.events).toEqual(events)
         expect(state.events.length).toBe(2);
 
-        const newState = calendarSlice.reducer(state, onLoadEvents(events))
+        calendarSlice.reducer(state, onLoadEvents(events))
         expect(state.events.length).toBe(events.length);
     });
 
