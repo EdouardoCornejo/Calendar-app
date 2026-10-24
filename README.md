@@ -192,7 +192,11 @@ Los tests viven en `tests/` y cubren los slices (`auth`, `calendar`, `ui`), los 
 npm test
 ```
 
-`jest.setup.js` carga las variables desde un archivo **`.env.test`** (no incluido en el repo) y _mockea_ `getEnvVariables` para usar `process.env`. Crea ese archivo con las mismas claves que `.env.example` (por ejemplo `VITE_MODE=test`) antes de ejecutar los tests.
+`jest.setup.js` carga las variables desde **`.env.test`**, que está incluido en el repo con valores de prueba no secretos (`VITE_MODE=test`, `VITE_API_URL=http://localhost:4000/api`), y _mockea_ `getEnvVariables` para usar `process.env`. No hace falta crear nada para ejecutar los tests.
+
+> Los tests de `useAuthStore` (`startLogin`, `startRegister`, `checkAuthToken`) hacen peticiones reales a `VITE_API_URL`: necesitan el backend **calendar-api** levantado en `http://localhost:4000` con el usuario de `tests/fixtures/testUser.js`. Sin backend, esos 3 tests fallan con `Network Error`.
+
+Para una ejecución única (sin _watch_): `npx jest`.
 
 ---
 
@@ -232,6 +236,7 @@ Calendar-app/
 │   └── styles.css
 ├── tests/                                 # api, calendar, fixtures, hooks, mocks, router, store
 ├── .env.example
+├── .env.test                              # Variables para Jest (valores no secretos)
 ├── babel.config.json
 ├── jest.config.json
 ├── jest.setup.js
